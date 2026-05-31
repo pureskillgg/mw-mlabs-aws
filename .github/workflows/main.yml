@@ -12,6 +12,11 @@ jobs:
         node:
           - '16'
           - '18'
+    services:
+      sqs:
+        image: pafortin/goaws
+        ports:
+          - 4100:4100
     steps:
       - name: Checkout
         uses: actions/checkout@v4
