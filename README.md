@@ -1,10 +1,8 @@
 # mLabs AWS
 
-[![npm](https://img.shields.io/npm/v/@meltwater/mlabs-aws.svg)](https://www.npmjs.com/package/@meltwater/mlabs-aws)
-[![github](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/meltwater/mlabs-aws)
-[![docs](https://img.shields.io/badge/docs-master-green.svg)](https://github.com/meltwater/mlabs-aws/tree/master/docs)
-[![Codecov](https://img.shields.io/codecov/c/github/meltwater/mlabs-aws.svg)](https://codecov.io/gh/meltwater/mlabs-aws)
-[![CircleCI](https://img.shields.io/circleci/project/github/meltwater/mlabs-aws.svg)](https://circleci.com/gh/meltwater/mlabs-aws)
+[![npm](https://img.shields.io/npm/v/@pureskillgg/mlabs-aws.svg)](https://www.npmjs.com/package/@pureskillgg/mlabs-aws)
+[![github](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/pureskillgg/mw-mlabs-aws)
+[![docs](https://img.shields.io/badge/docs-master-green.svg)](https://github.com/pureskillgg/mw-mlabs-aws/tree/master/docs)
 
 Convenient wrappers around the AWS SDK to keep code DRY.
 
@@ -24,13 +22,13 @@ All methods are wrapped with proper logging and error handling.
 Add this as a dependency to your project using [npm] with
 
 ```
-$ npm install @meltwater/mlabs-aws
+$ npm install @pureskillgg/mlabs-aws
 ```
 
 or using [Yarn] with
 
 ```
-$ yarn add @meltwater/mlabs-aws
+$ yarn add @pureskillgg/mlabs-aws
 ```
 
 [npm]: https://www.npmjs.com/
@@ -42,7 +40,7 @@ $ yarn add @meltwater/mlabs-aws
 
 ```js
 import { SQSClient } from '@aws-sdk/client-sqs'
-import { SqsQueue } from '@meltwater/mlabs-aws'
+import { SqsQueue } from '@pureskillgg/mlabs-aws'
 
 const queue = new SqsQueue({
   sqsClient: new SQSClient(),
@@ -61,8 +59,8 @@ const logMessages = async () => {
 ## Development Quickstart
 
 ```
-$ git clone https://github.com/meltwater/mlabs-aws.git
-$ cd mlabs-aws
+$ git clone https://github.com/pureskillgg/mw-mlabs-aws.git
+$ cd mw-mlabs-aws
 $ nvm install
 $ yarn
 ```
@@ -82,10 +80,10 @@ The [mlabs-aws source] is hosted on GitHub.
 Clone the project with
 
 ```
-$ git clone git@github.com:meltwater/mlabs-aws.git
+$ git clone git@github.com:pureskillgg/mw-mlabs-aws.git
 ```
 
-[mlabs-aws source]: https://github.com/meltwater/mlabs-aws
+[mlabs-aws source]: https://github.com/pureskillgg/mw-mlabs-aws
 
 ### Requirements
 
@@ -116,20 +114,14 @@ $ yarn
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/creationix/nvm
 
-#### CircleCI
+#### GitHub Actions
 
-_CircleCI should already be configured: this section is for reference only._
+The following secrets must be set on the repository:
 
-The following environment variables must be set on [CircleCI]:
-
-- `NPM_TOKEN`: npm token for installing and publishing packages.
-- `NPM_TEAM`: npm team to grant read-only package access
-  (format `org:team`, optional).
-- `CODECOV_TOKEN`: Codecov token for uploading coverage reports (optional).
-
-These may be set manually or by running the script `./.circleci/envvars.sh`.
-
-[CircleCI]: https://circleci.com/
+- `NPM_TOKEN`: npm token for publishing packages.
+- `GH_USER`, `GH_TOKEN`: GitHub user and token for pushing version commits.
+- `GIT_USER_NAME`, `GIT_USER_EMAIL`: Git identity for version commits.
+- `GPG_PRIVATE_KEY`, `GPG_PASSPHRASE`: GPG key for signing version tags.
 
 ### Development tasks
 
@@ -154,7 +146,7 @@ $ yarn run dist
 Release a new version using [`npm version`][npm version].
 This will run all tests, update the version number,
 create and push a tagged commit,
-and trigger CircleCI to publish the new version to npm.
+and trigger GitHub Actions to publish the new version to npm.
 
 - **Update the CHANGELOG before each new release after version 1.**
 - New versions are released when the commit message is a valid version number.

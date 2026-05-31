@@ -12,7 +12,7 @@ Every function described above is a top-level export.
 You can import any of them like this:
 
 ```js
-import { registerQueue } from '@meltwater/mlabs-aws'
+import { registerQueue } from '@pureskillgg/mlabs-aws'
 ```
 
 ---
@@ -247,6 +247,6 @@ If the queue is started (synchronous).
 (*boolean*)
 
 [Awilix]: https://github.com/jeffijoe/awilix
-[Logger]: https://github.com/meltwater/mlabs-logger
+[Logger]: https://github.com/pureskillgg/mlabs-logger
 [sqs-consumer]: https://github.com/rxfork/sqs-consumer
 [SqsQueue]: #sqsqueue
