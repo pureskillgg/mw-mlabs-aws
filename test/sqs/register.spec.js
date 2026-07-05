@@ -19,6 +19,10 @@ test.beforeEach(async (t) => {
   t.context.container = container
 })
 
+test.afterEach.always((t) => {
+  t.context.queueConfig?.sqsClient?.destroy()
+})
+
 test('process', async (t) => {
   t.timeout(3000)
   const { container, queueConfig, clientOptions } = t.context
@@ -32,14 +36,15 @@ test('process', async (t) => {
   }
 
   registerSqsQueue(container, {
+    waitTimeSeconds: 0,
     ...queueConfig,
     createProcessor:
       ({ log, reqId }) =>
-        async (...args) => {
-          log.info('Process: Start')
-          t.is(reqId, 'mock-req-id')
-          await process(...args)
-        },
+      async (...args) => {
+        log.info('Process: Start')
+        t.is(reqId, 'mock-req-id')
+        await process(...args)
+      },
     clientOptions
   })
   const queue = container.resolve(`${queueConfig.name}SqsQueue`)

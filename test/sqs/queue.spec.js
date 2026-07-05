@@ -11,6 +11,7 @@ test.beforeEach(async (t) => {
 
   t.context.queue = (t, handler = (x) => x, opts = {}) =>
     new SqsQueue({
+      waitTimeSeconds: 0,
       ...t.context.queueConfig,
       ...opts,
       handler,
@@ -20,10 +21,15 @@ test.beforeEach(async (t) => {
   await t.context.queue(t).create()
 })
 
+test.afterEach.always((t) => {
+  t.context.queueConfig?.sqsClient?.destroy()
+})
+
 test('start', async (t) => {
   const queue = t.context.queue(t)
   await queue.start()
   t.true(queue.isStarted())
+  await queue.stop()
 })
 
 test('stop', async (t) => {

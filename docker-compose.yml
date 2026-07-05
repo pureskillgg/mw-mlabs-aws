@@ -1,10 +1,8 @@
 ---
-version: '3.7'
-
 services:
   sqs:
     init: true
-    image: pafortin/goaws
+    image: admiralpiett/goaws
     networks:
       - mlabs-aws
     ports:
