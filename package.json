@@ -1,6 +1,6 @@
 {
   "name": "@pureskillgg/mlabs-aws",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Convenient wrappers around the AWS SDK to keep code DRY.",
   "type": "module",
   "main": "index.js",
