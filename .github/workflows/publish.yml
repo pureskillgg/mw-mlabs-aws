@@ -1,44 +1,55 @@
+---
 name: publish
 
 on:
   push:
     tags:
       - v*
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
 
 jobs:
   npm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '18'
+          node-version: '22'
           registry-url: https://registry.npmjs.org
+          cache: npm
+      - name: Update npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+      - name: Install dependencies
+        run: npm ci
       - name: Check version
         id: version
         run: |
           echo "name=$(jq -r '.name' package.json)" >> $GITHUB_OUTPUT
           echo "current=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
           echo "published=$(npm view $(jq -r '.name' package.json)@$(jq -r '.version' package.json) version 2>/dev/null || echo '')" >> $GITHUB_OUTPUT
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish ${{ steps.version.outputs.name }}@${{ steps.version.outputs.current }}
         if: steps.version.outputs.current != steps.version.outputs.published
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   github:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '18'
+          node-version: '22'
           registry-url: https://npm.pkg.github.com
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Check version
         id: version
         run: |

@@ -1,3 +1,4 @@
+---
 name: main
 
 on:
@@ -10,68 +11,36 @@ jobs:
     strategy:
       matrix:
         node:
-          - '16'
-          - '18'
+          - '22'
+          - '24'
     services:
       sqs:
-        image: pafortin/goaws
+        image: admiralpiett/goaws
         ports:
           - 4100:4100
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Yarn cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Node modules cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          cache: npm
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
       - name: Test
-        run: yarn test
+        run: npm test
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '18'
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Yarn cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Node modules cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          node-version: '22'
+          cache: npm
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
       - name: Lint
-        run: yarn run lint
+        run: npm run lint
