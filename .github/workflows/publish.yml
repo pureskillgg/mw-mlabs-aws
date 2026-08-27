@@ -1,5 +1,6 @@
 ---
 name: publish
+run-name: Publish ${{ github.ref_name }}
 
 on:
   push:
@@ -15,6 +16,7 @@ permissions:
 jobs:
   npm:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     services:
       sqs:
         image: admiralpiett/goaws
@@ -44,6 +46,7 @@ jobs:
         run: npm publish --access public
   github:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     services:
       sqs:
         image: admiralpiett/goaws
