@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   npm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     services:
       sqs:
@@ -45,7 +45,7 @@ jobs:
         if: steps.version.outputs.current != steps.version.outputs.published
         run: npm publish --access public
   github:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     services:
       sqs:
