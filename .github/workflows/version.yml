@@ -1,15 +1,20 @@
 ---
-name: version
+name: Cut version
 run-name: Cut ${{ github.event.inputs.version }}${{ github.event.client_payload.version }}
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version to cut
+        description: 'patch, minor, major or X.Y.Z'
+        required: true
   repository_dispatch:
     types:
       - version
+
+concurrency:
+  group: version
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -36,7 +41,6 @@ jobs:
           git remote set-url --push origin "https://${GH_USER}:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git config user.name "$GIT_USER_NAME"
           git config user.email "$GIT_USER_EMAIL"
-          npm config set sign-git-tag true
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v7
         id: import_gpg
@@ -47,14 +51,9 @@ jobs:
           git_committer_email: ${{ secrets.GIT_USER_EMAIL }}
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Cut ${{ github.event.inputs.version }}${{ github.event.client_payload.version }} version
-        run: npm version "$VERSION"
+        run: npm version --sign-git-tag=true "$VERSION"
         env:
           VERSION: ${{ github.event.inputs.version }}${{ github.event.client_payload.version }}
